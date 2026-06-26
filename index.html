@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAE Use of English - Interactive Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #f0f0f0;
+            padding: 15px 30px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section-info {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .exercise {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .exercise-number {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .exercise-text {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .blank {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+        }
+
+        .option input[type="radio"],
+        .option input[type="text"] {
+            margin-right: 10px;
+        }
+
+        .option input[type="radio"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .option input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            width: 100%;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+            border: 1px solid #f5c6cb;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-check {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #5a6268;
+        }
+
+        .btn-submit-all {
+            background: #28a745;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            margin-top: 30px;
+        }
+
+        .btn-submit-all:hover {
+            background: #218838;
+        }
+
+        .answer-key {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+            display: none;
+        }
+
+        .answer-key.show {
+            display: block;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .final-score {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-score.show {
+            display: block;
+        }
+
+        .final-score h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .final-score p {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 CAE Use of English</h1>
+            <p>Interactive Practice - Approximately 1 Hour</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">Questions</div>
+                <div class="stat-value" id="totalQuestions">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Answered</div>
+                <div class="stat-value" id="answeredCount">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Correct</div>
+                <div class="stat-value" id="correctCount">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Score</div>
+                <div class="stat-value" id="scorePercentage">0%</div>
+            </div>
+        </div>
+
+        <div class="content" id="mainContent">
+            <!-- PART 1: MULTIPLE CHOICE CLOZE -->
+            <div class="section">
+                <h2 class="section-title">Part 1: Multiple Choice Cloze</h2>
+                <p class="section-info">Read the text and choose the correct answer (A, B, C or D) for each gap.</p>
+                
+                <div class="exercise">
+                    <div class="exercise-number">Question 1</div>
+                    <div class="exercise-text">
+                        The discovery of ancient civilizations has <span class="blank">_______</span> our understanding of human history significantly.
+                    </div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q1" value="A" id="q1a">
+                            <label for="q1a">A) reinforced</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" value="B" id="q1b">
+                            <label for="q1b">B) transformed</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" value="C" id="q1c">
+                            <label for="q1c">C) maintained</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" value="D" id="q1d">
+                            <label for="q1d">D) preserved</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback-q1"></div>
+                    <div class="answer-key" id="answerkey-q1">Correct answer: B) transformed</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 2</div>
+                    <div class="exercise-text">
+                        Despite facing numerous obstacles, she <span class="blank">_______</span> to complete the project on time.
+                    </div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q2" value="A" id="q2a">
+                            <label for="q2a">A) managed</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="B" id="q2b">
+                            <label for="q2b">B) attempted</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="C" id="q2c">
+                            <label for="q2c">C) struggled</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="D" id="q2d">
+                            <label for="q2d">D) hesitated</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback-q2"></div>
+                    <div class="answer-key" id="answerkey-q2">Correct answer: A) managed</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 3</div>
+                    <div class="exercise-text">
+                        The committee <span class="blank">_______</span> the proposal due to insufficient evidence.
+                    </div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q3" value="A" id="q3a">
+                            <label for="q3a">A) delayed</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="B" id="q3b">
+                            <label for="q3b">B) rejected</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="C" id="q3c">
+                            <label for="q3c">C) considered</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="D" id="q3d">
+                            <label for="q3d">D) received</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback-q3"></div>
+                    <div class="answer-key" id="answerkey-q3">Correct answer: B) rejected</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 4</div>
+                    <div class="exercise-text">
+                        The environmental crisis requires immediate <span class="blank">_______</span> from both governments and individuals.
+                    </div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q4" value="A" id="q4a">
+                            <label for="q4a">A) reaction</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="B" id="q4b">
+                            <label for="q4b">B) action</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="C" id="q4c">
+                            <label for="q4c">C) discussion</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="D" id="q4d">
+                            <label for="q4d">D) attention</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback-q4"></div>
+                    <div class="answer-key" id="answerkey-q4">Correct answer: B) action</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 5</div>
+                    <div class="exercise-text">
+                        The financial markets showed <span class="blank">_______</span> improvements throughout the year.
+                    </div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q5" value="A" id="q5a">
+                            <label for="q5a">A) modest</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="B" id="q5b">
+                            <label for="q5b">B) minimal</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="C" id="q5c">
+                            <label for="q5c">C) gradual</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="D" id="q5d">
+                            <label for="q5d">D) steady</label>
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback-q5"></div>
+                    <div class="answer-key" id="answerkey-q5">Correct answer: D) steady</div>
+                </div>
+            </div>
+
+            <!-- PART 2: OPEN CLOZE -->
+            <div class="section">
+                <h2 class="section-title">Part 2: Open Cloze</h2>
+                <p class="section-info">Read the text and write the correct word in each gap. Only one word is needed.</p>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 6</div>
+                    <div class="exercise-text">
+                        The technology company announced that it would <span class="blank">invest</span> heavily in research and development <span class="blank">_______</span> the next five years.
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q6" placeholder="Enter the word" class="open-cloze">
+                    </div>
+                    <div class="feedback" id="feedback-q6"></div>
+                    <div class="answer-key" id="answerkey-q6">Correct answer: over (or: during/throughout)</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 7</div>
+                    <div class="exercise-text">
+                        Athletes need to maintain a balanced diet <span class="blank">in</span> order to perform <span class="blank">_______</span> their best.
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q7" placeholder="Enter the word" class="open-cloze">
+                    </div>
+                    <div class="feedback" id="feedback-q7"></div>
+                    <div class="answer-key" id="answerkey-q7">Correct answer: at</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 8</div>
+                    <div class="exercise-text">
+                        The report suggests that climate change has <span class="blank">_______</span> a significant impact on biodiversity worldwide.
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q8" placeholder="Enter the word" class="open-cloze">
+                    </div>
+                    <div class="feedback" id="feedback-q8"></div>
+                    <div class="answer-key" id="answerkey-q8">Correct answer: had</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 9</div>
+                    <div class="exercise-text">
+                        <span class="blank">As</span> far <span class="blank">_______</span> we know, the project will commence next month.
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q9" placeholder="Enter the word" class="open-cloze">
+                    </div>
+                    <div class="feedback" id="feedback-q9"></div>
+                    <div class="answer-key" id="answerkey-q9">Correct answer: as</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 10</div>
+                    <div class="exercise-text">
+                        The museum has <span class="blank">_______</span> home to countless artifacts for over two centuries.
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q10" placeholder="Enter the word" class="open-cloze">
+                    </div>
+                    <div class="feedback" id="feedback-q10"></div>
+                    <div class="answer-key" id="answerkey-q10">Correct answer: been</div>
+                </div>
+            </div>
+
+            <!-- PART 3: WORD FORMATION -->
+            <div class="section">
+                <h2 class="section-title">Part 3: Word Formation</h2>
+                <p class="section-info">Use the word given in CAPITALS at the end of each line to form a word that fits in the gap.</p>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 11</div>
+                    <div class="exercise-text">
+                        The <span class="blank">_______</span> of the conference has been postponed due to unforeseen circumstances. COMMENCE
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q11" placeholder="Enter the word" class="word-formation">
+                    </div>
+                    <div class="feedback" id="feedback-q11"></div>
+                    <div class="answer-key" id="answerkey-q11">Correct answer: commencement</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 12</div>
+                    <div class="exercise-text">
+                        Her <span class="blank">_______</span> approach to problem-solving has earned her several awards. INNOVATE
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q12" placeholder="Enter the word" class="word-formation">
+                    </div>
+                    <div class="feedback" id="feedback-q12"></div>
+                    <div class="answer-key" id="answerkey-q12">Correct answer: innovative</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 13</div>
+                    <div class="exercise-text">
+                        The <span class="blank">_______</span> of traditional values in modern society is a topic of considerable debate. PRESERVE
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q13" placeholder="Enter the word" class="word-formation">
+                    </div>
+                    <div class="feedback" id="feedback-q13"></div>
+                    <div class="answer-key" id="answerkey-q13">Correct answer: preservation</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 14</div>
+                    <div class="exercise-text">
+                        The scientist's findings were <span class="blank">_______</span> challenged by members of the academic community. CONSIDERABLE
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q14" placeholder="Enter the word" class="word-formation">
+                    </div>
+                    <div class="feedback" id="feedback-q14"></div>
+                    <div class="answer-key" id="answerkey-q14">Correct answer: considerably</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 15</div>
+                    <div class="exercise-text">
+                        The government's <span class="blank">_______</span> in the economic crisis was widely criticized. ABLE
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q15" placeholder="Enter the word" class="word-formation">
+                    </div>
+                    <div class="feedback" id="feedback-q15"></div>
+                    <div class="answer-key" id="answerkey-q15">Correct answer: inability</div>
+                </div>
+            </div>
+
+            <!-- PART 4: KEY WORD TRANSFORMATIONS -->
+            <div class="section">
+                <h2 class="section-title">Part 4: Key Word Transformations</h2>
+                <p class="section-info">Rewrite each sentence using the keyword provided so that it means the same. You must use between 3 and 6 words.</p>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 16</div>
+                    <div class="exercise-text">
+                        Original: "I find this book very interesting."<br>
+                        Rewrite: "This book <span class="blank">_______</span>" [INTERESTS]
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q16" placeholder="Complete the sentence" class="key-transformation">
+                    </div>
+                    <div class="feedback" id="feedback-q16"></div>
+                    <div class="answer-key" id="answerkey-q16">Correct answer: interests me greatly / interests me very much / interests me a lot</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 17</div>
+                    <div class="exercise-text">
+                        Original: "She regretted not studying harder for the exam."<br>
+                        Rewrite: "She wished <span class="blank">_______</span>" [STUDIED]
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q17" placeholder="Complete the sentence" class="key-transformation">
+                    </div>
+                    <div class="feedback" id="feedback-q17"></div>
+                    <div class="answer-key" id="answerkey-q17">Correct answer: she had studied harder / she had studied harder for the exam</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 18</div>
+                    <div class="exercise-text">
+                        Original: "It's possible that they will arrive late."<br>
+                        Rewrite: "They <span class="blank">_______</span>" [MIGHT]
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q18" placeholder="Complete the sentence" class="key-transformation">
+                    </div>
+                    <div class="feedback" id="feedback-q18"></div>
+                    <div class="answer-key" id="answerkey-q18">Correct answer: might arrive late</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 19</div>
+                    <div class="exercise-text">
+                        Original: "The traffic was so heavy that we missed the beginning of the film."<br>
+                        Rewrite: "Such heavy traffic <span class="blank">_______</span>" [CAUSED]
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q19" placeholder="Complete the sentence" class="key-transformation">
+                    </div>
+                    <div class="feedback" id="feedback-q19"></div>
+                    <div class="answer-key" id="answerkey-q19">Correct answer: caused us to miss the beginning / caused us to miss the beginning of the film</div>
+                </div>
+
+                <div class="exercise">
+                    <div class="exercise-number">Question 20</div>
+                    <div class="exercise-text">
+                        Original: "Smoking is forbidden in the restaurant."<br>
+                        Rewrite: "Customers <span class="blank">_______</span>" [NOT]
+                    </div>
+                    <div class="option">
+                        <input type="text" id="q20" placeholder="Complete the sentence" class="key-transformation">
+                    </div>
+                    <div class="feedback" id="feedback-q20"></div>
+                    <div class="answer-key" id="answerkey-q20">Correct answer: are not allowed to smoke / must not smoke</div>
+                </div>
+            </div>
+
+            <!-- SUBMIT ALL BUTTON -->
+            <div class="button-group">
+                <button class="btn-submit-all" onclick="checkAllAnswers()">Submit All Answers</button>
+                <button class="btn-reset" onclick="resetAll()">Reset All</button>
+            </div>
+
+            <!-- PROGRESS BAR -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- FINAL SCORE -->
+            <div class="final-score" id="finalScore">
+                <h2>Test Complete! 🎉</h2>
+                <p>Your Score: <span id="finalScoreValue">0</span>%</p>
+                <p id="scoreMessage"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const answers = {
+            q1: 'B',
+            q2: 'A',
+            q3: 'B',
+            q4: 'B',
+            q5: 'D',
+            q6: ['over', 'during', 'throughout'],
+            q7: ['at'],
+            q8: ['had'],
+            q9: ['as'],
+            q10: ['been'],
+            q11: ['commencement'],
+            q12: ['innovative'],
+            q13: ['preservation'],
+            q14: ['considerably'],
+            q15: ['inability'],
+            q16: ['interests me greatly', 'interests me very much', 'interests me a lot', 'interests me immensely'],
+            q17: ['she had studied harder', 'she had studied harder for the exam', 'she'd studied harder'],
+            q18: ['might arrive late', 'might be late'],
+            q19: ['caused us to miss the beginning', 'caused us to miss the beginning of the film'],
+            q20: ['are not allowed to smoke', 'must not smoke', 'cannot smoke']
+        };
+
+        let questionCount = 20;
+
+        function updateStats() {
+            let answered = 0;
+            let correct = 0;
+
+            for (let i = 1; i <= questionCount; i++) {
+                const answer = getAnswer(`q${i}`);
+                if (answer) answered++;
+                if (isAnswerCorrect(`q${i}`)) correct++;
+            }
+
+            document.getElementById('totalQuestions').textContent = questionCount;
+            document.getElementById('answeredCount').textContent = answered;
+            document.getElementById('correctCount').textContent = correct;
+            const percentage = questionCount > 0 ? Math.round((correct / questionCount) * 100) : 0;
+            document.getElementById('scorePercentage').textContent = percentage + '%';
+            document.getElementById('progressFill').style.width = (answered / questionCount) * 100 + '%';
+
+            return { answered, correct, percentage };
+        }
+
+        function getAnswer(questionId) {
+            if (questionId.startsWith('q') && questionId.length <= 3) {
+                const radios = document.querySelectorAll(`input[name="${questionId}"]`);
+                for (let radio of radios) {
+                    if (radio.checked) return radio.value;
+                }
+            } else {
+                const input = document.getElementById(questionId);
+                return input ? input.value.trim() : '';
+            }
+            return null;
+        }
+
+        function isAnswerCorrect(questionId) {
+            const userAnswer = getAnswer(questionId);
+            if (!userAnswer) return false;
+
+            const correctAnswers = answers[questionId];
+            if (Array.isArray(correctAnswers)) {
+                return correctAnswers.some(ans => ans.toLowerCase() === userAnswer.toLowerCase());
+            } else {
+                return correctAnswers === userAnswer;
+            }
+        }
+
+        function checkAnswer(questionId) {
+            const userAnswer = getAnswer(questionId);
+            const feedback = document.getElementById(`feedback-${questionId}`);
+            const answerKey = document.getElementById(`answerkey-${questionId}`);
+
+            if (!userAnswer) {
+                feedback.textContent = 'Please provide an answer.';
+                feedback.className = 'feedback incorrect';
+                answerKey.classList.remove('show');
+                updateStats();
+                return;
+            }
+
+            if (isAnswerCorrect(questionId)) {
+                feedback.textContent = '✓ Correct!';
+                feedback.className = 'feedback correct';
+                answerKey.classList.remove('show');
+            } else {
+                feedback.textContent = '✗ Incorrect. Check the answer key below.';
+                feedback.className = 'feedback incorrect';
+                answerKey.classList.add('show');
+            }
+
+            updateStats();
+        }
+
+        function checkAllAnswers() {
+            for (let i = 1; i <= questionCount; i++) {
+                checkAnswer(`q${i}`);
+            }
+
+            const stats = updateStats();
+            const scoreMessage = document.getElementById('scoreMessage');
+            const finalScoreValue = document.getElementById('finalScoreValue');
+            const percentage = stats.percentage;
+
+            finalScoreValue.textContent = percentage;
+
+            if (percentage >= 85) {
+                scoreMessage.textContent = 'Excellent work! You have mastered the Use of English skills! 🌟';
+            } else if (percentage >= 70) {
+                scoreMessage.textContent = 'Good job! Keep practicing to improve further. 👍';
+            } else if (percentage >= 50) {
+                scoreMessage.textContent = 'You need more practice. Review the incorrect answers and try again. 💪';
+            } else {
+                scoreMessage.textContent = 'Keep practicing! Focus on the areas where you struggled. 📚';
+            }
+
+            document.getElementById('finalScore').classList.add('show');
+            window.scrollTo({ top: document.getElementById('finalScore').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function resetAll() {
+            for (let i = 1; i <= questionCount; i++) {
+                const questionId = `q${i}`;
+                const radios = document.querySelectorAll(`input[name="${questionId}"]`);
+                radios.forEach(radio => radio.checked = false);
+
+                const input = document.getElementById(questionId);
+                if (input) input.value = '';
+
+                const feedback = document.getElementById(`feedback-${questionId}`);
+                if (feedback) {
+                    feedback.className = 'feedback';
+                    feedback.textContent = '';
+                }
+
+                const answerKey = document.getElementById(`answerkey-${questionId}`);
+                if (answerKey) answerKey.classList.remove('show');
+            }
+
+            document.getElementById('finalScore').classList.remove('show');
+            updateStats();
+        }
+
+        // Add event listeners for real-time checking
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const questionId = e.target.name;
+                checkAnswer(questionId);
+            });
+        });
+
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const questionId = e.target.id;
+                checkAnswer(questionId);
+            });
+        });
+
+        // Initialize
+        updateStats();
+    </script>
+</body>
+</html>
